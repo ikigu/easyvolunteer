@@ -56,7 +56,7 @@ model Organization {
   town            String?
   industry        String?
   events          Event[]
-  Owner           User @relation(fields: [userId], references: [id])
+  Owner           User @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId          String
 }
 
