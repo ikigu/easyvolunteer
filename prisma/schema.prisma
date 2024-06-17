@@ -65,9 +65,9 @@ model EventAttendee {
   userId            String
   event             Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   eventId           String
-  participantRole   ParticipantRole? @relation(fields: [participantRoleId], references:[id])
+  participantRole   ParticipantRole? @relation(fields: [participantRoleId], references:[id], onDelete: Cascade, onUpdate: Cascade)
   participantRoleId String?
-  volunteerRole     VolunteerRole? @relation(fields: [volunteerRoleId], references: [id])
+  volunteerRole     VolunteerRole? @relation(fields: [volunteerRoleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   volunteerRoleId   String?
 }
 
