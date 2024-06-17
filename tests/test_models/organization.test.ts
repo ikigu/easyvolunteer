@@ -4,8 +4,9 @@ const prisma = new PrismaClient()
 
 
 async function clearOrganizationDatabase() {
-	await prisma.organization.deleteMany()
+	const users = await prisma.user.findMany();
 	await prisma.user.deleteMany()
+	await prisma.organization.deleteMany()
 }
 
 async function createOrganization() {
@@ -14,7 +15,7 @@ async function createOrganization() {
 			firstName: 'BullDog',
 			lastName: 'Kubwa',
 			password: 'Leonardo da Vinci',
-			email: 'bulldog@gmail.com'
+			email: 'bulldog2@gmail.com'
 		}
 	})
 
