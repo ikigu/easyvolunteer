@@ -49,3 +49,38 @@ test('Organization is tied to correct user', async () => {
 
 	expect(orgWithUserDetails?.Owner.firstName).toBe('BullDog')
 })
+
+test('Organization has attribute id', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('id')
+})
+
+test('Organization has attribute createdAt', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('createdAt')
+})
+
+test('Organization has attribute updatedAt', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('updatedAt')
+})
+
+test('Organization has attribute name', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('name')
+})
+
+test('Organization has attribute town', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('town')
+})
+
+test('Organization has attribute industry', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('industry')
+})
+
+test('Organization has attribute userId', async () => {
+	const organization = await createOrganization();
+	expect(organization).toHaveProperty('userId')
+})
