@@ -36,7 +36,7 @@ model Event {
   id                String @id @default(uuid())
   createdAt         DateTime @default(now())
   updeatedAt        DateTime @default(now())
-  organization      Organization @relation(fields: [organizationId], references: [id])
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId    String
   title             String
   startTime         DateTime
