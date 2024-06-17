@@ -89,6 +89,6 @@ model VolunteerRole {
   event           Event @relation(fields: [eventId], references: [id])
   eventId         String
   title           String
-  description     String
+  description     String?
   volunteers      EventAttendee[]
 }
