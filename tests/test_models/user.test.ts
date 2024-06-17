@@ -6,6 +6,10 @@ async function clearUserDatabase() {
 	await prisma.user.deleteMany()
 }
 
+async function closeDatabase() {
+	await prisma.$disconnect()
+}
+
 async function createUser() {
 	const user = await prisma.user.create({
 		data: {
@@ -21,6 +25,9 @@ async function createUser() {
 
 beforeEach(() => {
 	return clearUserDatabase()
+})
+afterAll(() => {
+	return closeDatabase()
 })
 
 test('User is created successfully, given all required data', async () => {
