@@ -24,7 +24,19 @@ model User {
   town            String?
   organizations   Organization[]
   eventsAttending EventAttendee[]
+  eventsCreated   Event[]
+}
+
+model Organization {
+  id              String @id @default(uuid())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+  name            String
+  town            String?
+  industry        String?
   events          Event[]
+  Owner           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId          String
 }
 
 model Event {
@@ -43,18 +55,6 @@ model Event {
   participantRoles  ParticipantRole[]
   volunteerRoles    VolunteerRole[]
   attendees         EventAttendee[]
-}
-
-model Organization {
-  id              String @id @default(uuid())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @default(now())
-  name            String
-  town            String?
-  industry        String?
-  events          Event[]
-  Owner           User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId          String
 }
 
 model EventAttendee {
