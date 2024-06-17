@@ -18,7 +18,7 @@ async function createEvent() {
 			firstName: 'BullDog',
 			lastName: 'Kubwa',
 			password: 'Leonardo da Vinci',
-			email: 'bulldog@gmail.com'
+			email: 'bulldog3@gmail.com'
 		}
 	})
 
@@ -37,6 +37,7 @@ async function createEvent() {
 			startTime: new Date(),
 			endTime: new Date(),
 			cost: 559,
+			creatorId: user.id
 		}
 
 	})
