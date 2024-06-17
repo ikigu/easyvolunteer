@@ -4,7 +4,6 @@ const prisma = new PrismaClient()
 
 
 async function clearOrganizationDatabase() {
-	const users = await prisma.user.findMany();
 	await prisma.user.deleteMany()
 	await prisma.organization.deleteMany()
 }
@@ -44,11 +43,11 @@ test('Organization is tied to correct user', async () => {
 	
 	const orgWithUserDetails = await prisma.organization.findFirst({
 		include: {
-			Owner: true
+			owner: true
 		}
 	});
 
-	expect(orgWithUserDetails?.Owner.firstName).toBe('BullDog')
+	expect(orgWithUserDetails?.owner.firstName).toBe('BullDog')
 })
 
 test('Organization has attribute id', async () => {
