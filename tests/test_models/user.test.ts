@@ -16,7 +16,7 @@ async function createUser() {
 			firstName: 'BullDog',
 			lastName: 'Kubwa',
 			password: 'Leonardo da Vinci',
-			email: 'bulldog@gmail.com'
+			email: 'bulldog1@gmail.com'
 		}
 	})
 
@@ -103,4 +103,12 @@ test('User has attribute houseNumber', async () => {
 test('User has attribute town', async () => {
 	const user = await createUser();
 	expect(user).toHaveProperty('town')
+})
+
+test('Delete method works correctly on user model', async () => {
+	// No need to call delete method as it's done before each test
+
+	const allUsers = await prisma.user.findMany()
+
+	expect(allUsers).toHaveLength(0)
 })
