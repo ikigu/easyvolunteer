@@ -10,7 +10,6 @@ async function clearOrganizationDatabase() {
 }
 
 async function closeDatabase() {
-	await clearOrganizationDatabase();
 	await prisma.$disconnect()
 }
 
