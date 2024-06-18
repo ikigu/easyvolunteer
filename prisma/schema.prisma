@@ -11,17 +11,22 @@ model User {
   id              String @id @default(uuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
+
   firstName       String
   lastName        String
   email           String @unique
   password        String
+  
   profilePhotoUrl String?
+  
   birthday        DateTime?
+  
   phoneNumber     Int?
   streetName      String?
   houseName       String?
   houseNumber     String?
   town            String?
+  
   organizations   Organization[]
   eventsAttending EventAttendee[]
   eventsCreated   Event[]
@@ -32,10 +37,13 @@ model Organization {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
   name            String
+  
   town            String?
   industry        String?
+  
   owner           User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId          String
+  
   events          Event[]
 }
 
@@ -51,10 +59,13 @@ model Event {
   organizationId    String
 
   title             String
+  description       String?
+
   startTime         DateTime
   endTime           DateTime
+
   cost              Int
-  description       String?
+
   participantRoles  ParticipantRole[]
   volunteerRoles    VolunteerRole[]
   attendees         EventAttendee[]
@@ -64,12 +75,16 @@ model EventAttendee {
   id                String @id @default(uuid())
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())
+
   user              User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId            String
+
   event             Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   eventId           String
+  
   participantRole   ParticipantRole? @relation(fields: [participantRoleId], references:[id], onDelete: Cascade, onUpdate: Cascade)
   participantRoleId String?
+
   volunteerRole     VolunteerRole? @relation(fields: [volunteerRoleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   volunteerRoleId   String?
 }
@@ -78,10 +93,13 @@ model ParticipantRole {
   id              String @id @default(uuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
+
   event           Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId         String
+
   title           String
   description     String?
+
   participants    EventAttendee[]
 }
 
@@ -89,9 +107,12 @@ model VolunteerRole {
   id              String @id @default(uuid())
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
+
   event           Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
   eventId         String
+
   title           String
   description     String?
+
   volunteers      EventAttendee[]
 }
