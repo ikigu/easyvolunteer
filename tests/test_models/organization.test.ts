@@ -1,90 +1,89 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function clearOrganizationDatabase() {
-	await prisma.user.deleteMany();
-	await prisma.organization.deleteMany();
-	await prisma.event.deleteMany();
-	await prisma.event.deleteMany();
-	await prisma.$disconnect()
+    await prisma.user.deleteMany();
+    await prisma.organization.deleteMany();
+    await prisma.event.deleteMany();
+    await prisma.event.deleteMany();
+    await prisma.$disconnect();
 }
 
 async function initializeOrganizationDatabase() {
-	await prisma.user.deleteMany();
+    await prisma.user.deleteMany();
 
-	const user = await prisma.user.create({
-		data: {
-			firstName: 'Kelvin',
-			lastName: 'Rapando',
-			password: 'Leonardo da Vinci',
-			email: 'Kelvin2@gmail.com'
-		}
-	})
+    const user = await prisma.user.create({
+        data: {
+            firstName: 'Kelvin',
+            lastName: 'Rapando',
+            password: 'Leonardo da Vinci',
+            email: 'Kelvin2@gmail.com'
+        }
+    });
 
-	await prisma.organization.create({
-		data: {
-			name: 'Quest NC',
-			town: 'Jamhuri Town',
-			userId: user.id
-		}
-	})
+    await prisma.organization.create({
+        data: {
+            name: 'Quest NC',
+            town: 'Jamhuri Town',
+            userId: user.id
+        }
+    });
 }
 
-
 beforeEach(() => {
-	return initializeOrganizationDatabase()
-})
+    return initializeOrganizationDatabase();
+});
 afterEach(() => {
-	return clearOrganizationDatabase()
-})
+    return clearOrganizationDatabase();
+});
 
 test('Organization created successfully, when all required data is given', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization?.name).toBe('Quest NC')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization?.name).toBe('Quest NC');
+});
 
 test('Organization is tied to correct user', async () => {
-	const orgWithUserDetails = await prisma.organization.findFirst({
-		include: {
-			owner: true
-		}
-	});
+    const orgWithUserDetails = await prisma.organization.findFirst({
+        include: {
+            owner: true
+        }
+    });
 
-	expect(orgWithUserDetails?.owner.firstName).toBe('Kelvin')
-})
+    expect(orgWithUserDetails?.owner.firstName).toBe('Kelvin');
+});
 
 test('Organization has attribute id', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('id')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('id');
+});
 
 test('Organization has attribute createdAt', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('createdAt')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('createdAt');
+});
 
 test('Organization has attribute updatedAt', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('updatedAt')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('updatedAt');
+});
 
 test('Organization has attribute name', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('name')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('name');
+});
 
 test('Organization has attribute town', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('town')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('town');
+});
 
 test('Organization has attribute industry', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('industry')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('industry');
+});
 
 test('Organization has attribute userId', async () => {
-	const organization = await prisma.organization.findFirst();
-	expect(organization).toHaveProperty('userId')
-})
+    const organization = await prisma.organization.findFirst();
+    expect(organization).toHaveProperty('userId');
+});
