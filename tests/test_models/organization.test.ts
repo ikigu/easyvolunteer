@@ -2,85 +2,94 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient()
 
-
 async function clearOrganizationDatabase() {
 	await prisma.user.deleteMany()
 	await prisma.organization.deleteMany()
+	await prisma.event.deleteMany()
+	await prisma.event.deleteMany()
 }
 
-async function createOrganization() {
+async function closeDatabase() {
+	await clearOrganizationDatabase();
+	await prisma.$disconnect()
+}
+
+async function initializeOrganizationDatabase() {
 	const user = await prisma.user.create({
 		data: {
-			firstName: 'BullDog',
-			lastName: 'Kubwa',
+			firstName: 'Kelvin',
+			lastName: 'Rapando',
 			password: 'Leonardo da Vinci',
-			email: 'bulldog2@gmail.com'
+			email: 'Kelvin2@gmail.com'
 		}
 	})
 
-	const organization = await prisma.organization.create({
+	await prisma.organization.create({
 		data: {
-			name: 'Coolest Org',
-			town: 'Coolest Town',
+			name: 'Quest NC',
+			town: 'Jamhuri Town',
 			userId: user.id
 		}
 	})
-
-	return organization;
 }
 
-beforeEach(() => {
+
+beforeAll(() => {
+	return initializeOrganizationDatabase()
+})
+afterAll(() => {
 	return clearOrganizationDatabase()
+})
+afterAll(() => {
+	return closeDatabase();
 })
 
 test('Organization created successfully, when all required data is given', async () => {
-	const organization = await createOrganization();
-	expect(organization.name).toBe('Coolest Org')
+	const organization = await prisma.organization.findFirst();
+	expect(organization?.name).toBe('Quest NC')
 })
 
 test('Organization is tied to correct user', async () => {
-	await createOrganization();
-	
 	const orgWithUserDetails = await prisma.organization.findFirst({
 		include: {
 			owner: true
 		}
 	});
 
-	expect(orgWithUserDetails?.owner.firstName).toBe('BullDog')
+	expect(orgWithUserDetails?.owner.firstName).toBe('Kelvin')
 })
 
 test('Organization has attribute id', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('id')
 })
 
 test('Organization has attribute createdAt', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('createdAt')
 })
 
 test('Organization has attribute updatedAt', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('updatedAt')
 })
 
 test('Organization has attribute name', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('name')
 })
 
 test('Organization has attribute town', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('town')
 })
 
 test('Organization has attribute industry', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('industry')
 })
 
 test('Organization has attribute userId', async () => {
-	const organization = await createOrganization();
+	const organization = await prisma.organization.findFirst();
 	expect(organization).toHaveProperty('userId')
 })
