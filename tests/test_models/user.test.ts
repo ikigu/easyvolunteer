@@ -4,17 +4,14 @@ import { after } from "node:test";
 const prisma = new PrismaClient()
 
 async function clearDatabase() {
-	await prisma.user.deleteMany()
-	// await prisma.organization.deleteMany()
-	// await prisma.event.deleteMany()
-	// await prisma.eventAttendee.deleteMany()
-}
-
-async function closeDatabase() {
-	await prisma.$disconnect()
+	await prisma.user.deleteMany();
+	await prisma.$disconnect();
 }
 
 async function initializeUserDatabase() {
+	await prisma.user.deleteMany();
+
+
 	await prisma.user.create({
 		data: {
 			firstName: 'Alfrida',
@@ -25,15 +22,12 @@ async function initializeUserDatabase() {
 	})
 }
 
-beforeAll(() => {
+beforeEach(() => {
 	return initializeUserDatabase();
-})
-afterAll(() => {
-	return closeDatabase();
-})
-afterAll(() => {
+});
+afterEach(() => {
 	return clearDatabase();
-})
+});
 
 test('User is created successfully, given all required data', async () => {
 	const user = await prisma.user.findFirst();

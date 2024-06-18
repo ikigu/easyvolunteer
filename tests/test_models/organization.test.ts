@@ -3,17 +3,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
 
 async function clearOrganizationDatabase() {
-	await prisma.user.deleteMany()
-	await prisma.organization.deleteMany()
-	await prisma.event.deleteMany()
-	await prisma.event.deleteMany()
-}
-
-async function closeDatabase() {
+	await prisma.user.deleteMany();
+	await prisma.organization.deleteMany();
+	await prisma.event.deleteMany();
+	await prisma.event.deleteMany();
 	await prisma.$disconnect()
 }
 
 async function initializeOrganizationDatabase() {
+	await prisma.user.deleteMany();
+
 	const user = await prisma.user.create({
 		data: {
 			firstName: 'Kelvin',
@@ -33,14 +32,11 @@ async function initializeOrganizationDatabase() {
 }
 
 
-beforeAll(() => {
+beforeEach(() => {
 	return initializeOrganizationDatabase()
 })
-afterAll(() => {
+afterEach(() => {
 	return clearOrganizationDatabase()
-})
-afterAll(() => {
-	return closeDatabase();
 })
 
 test('Organization created successfully, when all required data is given', async () => {
