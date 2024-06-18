@@ -4,7 +4,7 @@
 	"description": "EasyVolunteer is a system that helps non-profits manage their events. It brings together volunteers and participants into one platform, making admin tasks easier for event organizers.",
 	"main": "app.ts",
 	"scripts": {
-		"test": "jest"
+		"test": "jest --runInBand"
 	},
 	"repository": {
 		"type": "git",
