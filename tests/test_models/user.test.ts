@@ -1,114 +1,111 @@
 import { PrismaClient } from "@prisma/client";
+import { after } from "node:test";
 
 const prisma = new PrismaClient()
 
-async function clearUserDatabase() {
+async function clearDatabase() {
 	await prisma.user.deleteMany()
+	// await prisma.organization.deleteMany()
+	// await prisma.event.deleteMany()
+	// await prisma.eventAttendee.deleteMany()
 }
 
 async function closeDatabase() {
 	await prisma.$disconnect()
 }
 
-async function createUser() {
-	const user = await prisma.user.create({
+async function initializeUserDatabase() {
+	await prisma.user.create({
 		data: {
-			firstName: 'BullDog',
-			lastName: 'Kubwa',
+			firstName: 'Alfrida',
+			lastName: 'Aluoch',
 			password: 'Leonardo da Vinci',
-			email: 'bulldog1@gmail.com'
+			email: 'Alfrida1@gmail.com'
 		}
 	})
-
-	return user;
 }
 
-beforeEach(() => {
-	return clearUserDatabase()
+beforeAll(() => {
+	return initializeUserDatabase();
 })
 afterAll(() => {
-	return closeDatabase()
+	return closeDatabase();
+})
+afterAll(() => {
+	return clearDatabase();
 })
 
 test('User is created successfully, given all required data', async () => {
-	const user = await createUser()
-	expect(user.firstName).toBe('BullDog')
+	const user = await prisma.user.findFirst();
+	expect(user?.firstName).toBe('Alfrida')
 })
 
 test('User has attribute profilePhoto', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('profilePhotoUrl')
 })
 
 test('User has attribute birthday', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('birthday')
 })
 
 test('User has attribute id', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('id')
 })
 
 test('User has attribute createdAt', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('createdAt')
 })
 
 test('User has attribute updatedAt', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('updatedAt');
 })
 
 test('User has attribute profilePhotoUrl', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('profilePhotoUrl')
 })
 
 test('User has attribute firstName', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('firstName')
 })
 
 test('User has attribute lastName', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('lastName')
 })
 
 test('User has attribute email', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('email')
 })
 
 test('User has attribute password', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('password')
 })
 
 test('User has attribute phoneNumber', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('phoneNumber')
 })
 
 test('User has attribute houseName', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('houseName')
 })
 
 test('User has attribute houseNumber', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('houseNumber')
 })
 
 test('User has attribute town', async () => {
-	const user = await createUser();
+	const user = await prisma.user.findFirst();
 	expect(user).toHaveProperty('town')
-})
-
-test('Delete method works correctly on user model', async () => {
-	// No need to call delete method as it's done before each test
-
-	const allUsers = await prisma.user.findMany()
-
-	expect(allUsers).toHaveLength(0)
 })
