@@ -77,14 +77,13 @@ router.delete('/api/users/:userId', async (req, res) => {
     //TODO: Check content of deletionIsSuccessful
     //TODO: This method might require an auth token
 
-    let deletionIsSuccessful;
-
     try {
-        deletionIsSuccessful = await prisma.user.delete({
+        const deletionIsSuccessful = await prisma.user.delete({
             where: {
                 id: req.params.userId
             }
         });
+        res.json(deletionIsSuccessful);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2001') {
@@ -94,8 +93,6 @@ router.delete('/api/users/:userId', async (req, res) => {
             res.status(500).json({ error: 'Something went wrong' });
         }
     }
-
-    res.json(deletionIsSuccessful);
 });
 
 router.put('/api/users/:userId', async (req, res) => {
