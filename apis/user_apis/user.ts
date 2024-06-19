@@ -75,6 +75,7 @@ router.post('/api/users', async (req, res) => {
 
 router.delete('/api/users/:userId', async (req, res) => {
     //TODO: Check content of deletionIsSuccessful
+    //TODO: This method might require an auth token
 
     let deletionIsSuccessful;
 
