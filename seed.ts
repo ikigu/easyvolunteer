@@ -69,7 +69,7 @@ const organization2 = {
 
 const organization3 = {
     id: '8b1eb7b3-0bb8-40d6-9f03-58dde5b7eb84',
-    name: 'ActionAid Internation Kenya',
+    name: 'ActionAid International Kenya',
     userId: '4b679c56-207c-49fd-a246-617cf3c7740e',
     town: 'Nairobi',
     industry: 'Gender Equality'
