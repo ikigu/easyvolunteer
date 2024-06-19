@@ -3,7 +3,7 @@ import prisma from '../client';
 
 const router = express.Router();
 
-router.get('api/events', async (req, res, next) => {
+router.get('/api/events', async (req, res, next) => {
     // Return all events
 
     try {
