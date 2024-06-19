@@ -1,5 +1,6 @@
 import express from 'express';
 import prisma from '../client';
+import { Prisma } from '@prisma/client';
 
 const router = express.Router();
 
@@ -100,6 +101,54 @@ router.post('/api/events', async (req, res, next) => {
 
         return res.json(event);
     } catch (e) {
+        next(e);
+    }
+});
+
+/**
+ * @todo: This method should check for some authorization
+ */
+
+router.put('/api/events/:eventId', async (req, res, next) => {
+    // Delete any request body fields not in db schema
+
+    const allowedFields = [
+        'title',
+        'description',
+        'startTime',
+        'endTime',
+        'cost'
+    ];
+
+    for (const key in req.body) {
+        if (!allowedFields.includes(key)) {
+            return res.status(400).json({
+                error: `'${key}' key doesn't exist on events or is not updateable`
+            });
+        }
+    }
+
+    req.body.updatedAt = new Date();
+
+    try {
+        const event = await prisma.event.update({
+            where: {
+                id: req.params.eventId
+            },
+            data: req.body
+        });
+
+        return res.json(event);
+    } catch (e) {
+        console.log(e);
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res
+                    .status(404)
+                    .json({ error: 'Event to update not found' });
+            }
+        }
+
         next(e);
     }
 });
