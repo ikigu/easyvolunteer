@@ -6,7 +6,8 @@
     "scripts": {
         "test": "jest --runInBand",
         "prettier-format": "prettier --config .prettierrc './**/*.ts' --write",
-        "migrate": "npx prisma migrate dev --name init"
+        "migrate": "npx prisma migrate dev --name init",
+        "start-api": "nodemon apis/app.ts"
     },
     "repository": {
         "type": "git",
