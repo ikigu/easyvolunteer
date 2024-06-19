@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import express from 'express';
 import prisma from '../client';
-import { error } from 'node:console';
+import { Prisma } from '@prisma/client';
 
 const router = express.Router();
 
@@ -71,6 +71,30 @@ router.post('/api/users', async (req, res) => {
     delete userWithoutPassword.password;
 
     return res.json(userWithoutPassword);
+});
+
+router.delete('/api/users/:userId', async (req, res) => {
+    //TODO: Check content of deletionIsSuccessful
+
+    let deletionIsSuccessful;
+
+    try {
+        deletionIsSuccessful = await prisma.user.delete({
+            where: {
+                id: req.params.userId
+            }
+        });
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2001') {
+                res.status(404).json({ error: 'User not found' });
+            }
+        } else {
+            res.status(500).json({ error: 'Something went wrong' });
+        }
+    }
+
+    res.json(deletionIsSuccessful);
 });
 
 export default router;
