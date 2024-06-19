@@ -20,6 +20,11 @@ router.get('/api/organizations/:organizationId', async (req, res, next) => {
                 id: req.params.organizationId
             }
         });
+
+        if (!organization) {
+            return res.status(404).json({ error: 'Not found' });
+        }
+
         return res.json(organization);
     } catch (e) {
         next(e);
