@@ -80,10 +80,6 @@ router.post('/api/events', async (req, res, next) => {
         next(e);
     }
 
-    // Check if org exists
-
-    // Delete unallowed fields
-
     for (const key in req.body) {
         if (!requiredFields.includes(key)) {
             delete req.body[key];
@@ -91,6 +87,8 @@ router.post('/api/events', async (req, res, next) => {
     }
 
     // Create the event
+    req.body.startTime = new Date(req.body.startTime);
+    req.body.endTime = new Date(req.body.endTime);
 
     try {
         const event = await prisma.event.create({
