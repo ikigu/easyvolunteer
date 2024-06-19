@@ -34,7 +34,7 @@ router.get('/api/events/:eventId', async (req, res, next) => {
 });
 
 router.post('/api/events', async (req, res, next) => {
-    // Check if all required fields have been assigned
+    // Check if all required fields are in the request body
     const requiredFields = [
         'creatorId',
         'organizationId',
@@ -52,7 +52,8 @@ router.post('/api/events', async (req, res, next) => {
         }
     }
 
-    // Check if user exists
+    // Check if user exists, check if org exists
+    // Check if the user is tied to the org
 
     try {
         const user = await prisma.user.findUnique({
@@ -80,16 +81,18 @@ router.post('/api/events', async (req, res, next) => {
         next(e);
     }
 
+    // Delete any fields not in the db schema
     for (const key in req.body) {
         if (!requiredFields.includes(key)) {
             delete req.body[key];
         }
     }
 
-    // Create the event
+    // Transform date strings to Date objects ?? Might be unnecessary
     req.body.startTime = new Date(req.body.startTime);
     req.body.endTime = new Date(req.body.endTime);
 
+    // Create the event
     try {
         const event = await prisma.event.create({
             data: req.body
