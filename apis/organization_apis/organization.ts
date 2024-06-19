@@ -1,6 +1,5 @@
 import express from 'express';
 import prisma from '../client';
-import { nextTick } from 'process';
 
 const router = express.Router();
 
@@ -9,6 +8,19 @@ router.get('/api/organizations', async (req, res, next) => {
     try {
         const allOrganizations = await prisma.organization.findMany();
         res.json(allOrganizations);
+    } catch (e) {
+        next(e);
+    }
+});
+
+router.get('/api/organizations/:organizationId', async (req, res, next) => {
+    try {
+        const organization = await prisma.organization.findUnique({
+            where: {
+                id: req.params.organizationId
+            }
+        });
+        return res.json(organization);
     } catch (e) {
         next(e);
     }
