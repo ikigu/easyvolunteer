@@ -10,6 +10,7 @@ const router = express.Router();
  */
 
 router.get('/api/users', async (req, res) => {
+    // TODO: add try/catch block for error handling
     const allUsers: any = await prisma.user.findMany();
 
     for (const user of allUsers) {
@@ -20,6 +21,7 @@ router.get('/api/users', async (req, res) => {
 });
 
 router.get('/api/users/:userid', async (req, res) => {
+    //TODO: add try/catch block for error handling
     const user: any = await prisma.user.findUnique({
         where: {
             id: req.params.userid
