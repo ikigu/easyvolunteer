@@ -96,7 +96,9 @@ router.put('/api/organizations/:organizationId', async (req, res, next) => {
 
     for (const key in req.body) {
         if (!allowedFields.includes(key)) {
-            delete req.body[key];
+            return res.status(400).json({
+                error: `'${key}' key doesn't exist on organizations or is not updateable`
+            });
         }
     }
 
