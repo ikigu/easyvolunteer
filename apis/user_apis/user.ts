@@ -97,4 +97,10 @@ router.delete('/api/users/:userId', async (req, res) => {
     res.json(deletionIsSuccessful);
 });
 
+router.put('/api/users/:userId', async (req, res) => {
+    // update updatedAt
+    // ignore all fields that don't exist in database
+    // Hash password if it exists -> Might require an auth token to allow the change
+});
+
 export default router;
