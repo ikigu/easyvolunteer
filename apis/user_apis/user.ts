@@ -8,9 +8,11 @@ const router = express.Router();
  */
 
 router.get('/api/users', async (req, res) => {
-    // TODO: Remove password
+    const allUsers: any = await prisma.user.findMany();
 
-    const allUsers = await prisma.user.findMany();
+    for (const user of allUsers) {
+        delete user.password;
+    }
 
     res.json(allUsers);
 });
