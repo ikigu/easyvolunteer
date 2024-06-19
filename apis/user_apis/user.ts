@@ -105,6 +105,10 @@ router.put('/api/users/:userId', async (req, res) => {
     // TODO: profilePhotoUrl will require additional logic
     // TODO: birthday might require a typecheck?
 
+    if (Object.keys(req.body).length === 0) {
+        return res.status(400).json({ error: 'No items to update' });
+    }
+
     const allowedFields = [
         'firstName',
         'lastName',
