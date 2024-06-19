@@ -1,5 +1,6 @@
 import express from 'express';
 import prisma from '../client';
+import { Prisma } from '@prisma/client';
 
 const router = express.Router();
 
@@ -111,6 +112,30 @@ router.put('/api/organizations/:organizationId', async (req, res, next) => {
 
         res.json(organization);
     } catch (e) {
+        next(e);
+    }
+});
+
+router.delete('/api/organizations/:organizationId', async (req, res, next) => {
+    // TODO: This method should require authorization
+
+    try {
+        await prisma.organization.delete({
+            where: {
+                id: req.params.organizationId
+            }
+        });
+
+        return res.json({});
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res
+                    .status(404)
+                    .json({ error: 'Record to delete does not exist' });
+            }
+        }
+
         next(e);
     }
 });
