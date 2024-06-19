@@ -31,4 +31,45 @@ router.get('/api/organizations/:organizationId', async (req, res, next) => {
     }
 });
 
+router.post('/api/organizations', async (req, res, next) => {
+    const requiredFields = ['name', 'userId'];
+
+    for (const field of requiredFields) {
+        if (!req.body[field]) {
+            return res.status(400).json({ error: `No ${field}` });
+        }
+    }
+
+    // TODO: Only allow the following fields ['town', 'description', 'industry']
+    for (const key in req.body) {
+        if (!requiredFields.includes(key)) {
+            delete req.body[key];
+        }
+    }
+
+    try {
+        const organizationCreator = await prisma.user.findUnique({
+            where: {
+                id: req.body.userId
+            }
+        });
+
+        if (!organizationCreator) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+    } catch (e) {
+        next(e);
+    }
+
+    try {
+        const organization = await prisma.organization.create({
+            data: req.body
+        });
+
+        return res.json(organization);
+    } catch (e) {
+        next(e);
+    }
+});
+
 export default router;
