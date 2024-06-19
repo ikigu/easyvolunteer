@@ -83,14 +83,14 @@ router.delete('/api/users/:userId', async (req, res) => {
                 id: req.params.userId
             }
         });
-        res.json(deletionIsSuccessful);
+        return res.json(deletionIsSuccessful);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2001') {
-                res.status(404).json({ error: 'User not found' });
+                return res.status(404).json({ error: 'User not found' });
             }
         } else {
-            res.status(500).json({ error: 'Something went wrong' });
+            return res.status(500).json({ error: 'Something went wrong' });
         }
     }
 });
