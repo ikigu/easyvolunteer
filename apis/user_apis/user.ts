@@ -128,14 +128,17 @@ router.put('/api/users/:userId', async (req, res) => {
     req.body.updatedAt = new Date();
 
     try {
-        const updateIsSuccessful = await prisma.user.update({
+        const user = await prisma.user.update({
             where: {
                 id: req.params.userId
             },
             data: req.body
         });
 
-        res.json(updateIsSuccessful);
+        const userWithoutPassword = user as any;
+        delete userWithoutPassword.password;
+
+        res.json(userWithoutPassword);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2001') {
