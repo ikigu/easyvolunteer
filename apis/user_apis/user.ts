@@ -45,7 +45,7 @@ router.post('/api/users', async (req, res) => {
 
     for (const data of requiredData) {
         if (!req.body[data]) {
-            res.status(400).json({ error: `No ${data}` });
+            return res.status(400).json({ error: `No ${data}` });
         }
     }
 
@@ -64,7 +64,7 @@ router.post('/api/users', async (req, res) => {
             data: req.body
         });
     } catch {
-        res.status(500).json({ error: 'Something went wrong!' });
+        return res.status(500).json({ error: 'Something went wrong!' });
     }
 
     const userWithoutPassword = user as any;
