@@ -40,6 +40,7 @@ model Organization {
   
   town            String?
   industry        String?
+  description     String?
   
   owner           User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId          String
