@@ -99,9 +99,53 @@ router.delete('/api/users/:userId', async (req, res) => {
 });
 
 router.put('/api/users/:userId', async (req, res) => {
-    // update updatedAt
-    // ignore all fields that don't exist in database
-    // Hash password if it exists -> Might require an auth token to allow the change
+    // TODO: profilePhotoUrl will require additional logic
+    // TODO: birthday might require a typecheck?
+
+    const allowedFields = [
+        'firstName',
+        'lastName',
+        'email',
+        'password',
+        'profilePhotoUrl',
+        'birthday',
+        'phoneNumber',
+        'streetName',
+        'houseName',
+        'houseNumber',
+        'town'
+    ];
+
+    for (const key in req.body) {
+        if (!allowedFields.includes(key)) {
+            delete req.body[key];
+        }
+    }
+
+    if ('password' in req.body) {
+        req.body.password = bcrypt.hashSync(req.body.password, 10);
+    }
+
+    req.body.updatedAt = new Date();
+
+    try {
+        const updateIsSuccessful = await prisma.user.update({
+            where: {
+                id: req.params.userId
+            },
+            data: req.body
+        });
+
+        res.json(updateIsSuccessful);
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2001') {
+                res.status(404).json({ error: 'User not found' });
+            }
+        } else {
+            res.status(500).json({ error: 'Something went wrong' });
+        }
+    }
 });
 
 export default router;
