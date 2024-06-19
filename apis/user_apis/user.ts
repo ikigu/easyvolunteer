@@ -38,6 +38,9 @@ router.get('/api/users/:userid', async (req, res) => {
 });
 
 router.post('/api/users', async (req, res) => {
+    // TODO: Ensure email is correct format
+    // TODO: Enforce some rules for password?
+
     const requiredData: string[] = [
         'firstName',
         'lastName',
