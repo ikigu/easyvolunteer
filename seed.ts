@@ -31,7 +31,7 @@ const user4 = {
     firstName: 'Angela',
     lastName: 'Sheldrick',
     password: bcrypt.hashSync('%8445re]])3/?  _YuiNk', 10),
-    email: 'angela@sheldrickwildlifetrust.org/',
+    email: 'angela@sheldrickwildlifetrust.org',
     id: '699e9241-1264-41a5-a297-e70c1c0711da'
 };
 
