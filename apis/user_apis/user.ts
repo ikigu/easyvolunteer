@@ -79,16 +79,17 @@ router.post('/api/users', async (req, res) => {
 });
 
 router.delete('/api/users/:userId', async (req, res) => {
-    //TODO: Check content of deletionIsSuccessful
     //TODO: This method might require an auth token
+    //TODO: Correctly handle user not found case, nothing happens now weirdly
 
     try {
-        const deletionIsSuccessful = await prisma.user.delete({
+        await prisma.user.delete({
             where: {
                 id: req.params.userId
             }
         });
-        return res.json(deletionIsSuccessful);
+
+        return res.json({});
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2001') {
