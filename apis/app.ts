@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import eventApis from './event_apis/event';
 import organizationApis from './organization_apis/organization';
-import sharedEventAttendeeRolesApis from './shared_event_roles_apis/shared_event_roles_routes';
+import sharedEventAttendeeRolesApis from './event_attendee_roles_apis/event_attendee_roles';
 import userApis from './user_apis/user';
 
 const app = express();
