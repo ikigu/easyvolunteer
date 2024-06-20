@@ -176,4 +176,45 @@ router.delete('/api/events/:eventId', async (req, res, next) => {
     }
 });
 
+router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
+    // Returns an array of volunteers or participants
+    // for event of eventId based on roleType
+
+    if (
+        req.params.roleType !== 'volunteer_roles' &&
+        req.params.roleType !== 'participant_roles'
+    ) {
+        return res.status(404).json({
+            error: `Resource type '${req.params.roleType}' doesn't exist on events`
+        });
+    }
+
+    const roleType =
+        req.params.roleType === 'volunteer_roles'
+            ? 'volunteerRoles'
+            : 'participantRoles';
+
+    try {
+        const event = await prisma.event.findUniqueOrThrow({
+            where: {
+                id: req.params.eventId
+            },
+            include: {
+                participantRoles: true,
+                volunteerRoles: true
+            }
+        });
+
+        return res.json(event[roleType]);
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res.status(404).json({ error: 'Event does not exist' });
+            }
+        }
+
+        next(e);
+    }
+});
+
 export default router;
