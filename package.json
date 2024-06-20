@@ -7,7 +7,8 @@
         "test": "jest --runInBand",
         "prettier-format": "prettier --config .prettierrc './**/*.ts' --write",
         "migrate": "npx prisma migrate dev --name init",
-        "api-server": "nodemon apis/app.ts"
+        "api-server": "nodemon apis/app.ts",
+        "seed": "npx ts-node seed.ts"
     },
     "repository": {
         "type": "git",
