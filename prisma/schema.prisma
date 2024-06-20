@@ -82,12 +82,19 @@ model EventAttendee {
 
   event             Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   eventId           String
-  
+
+  role              EventAttendeeRole
+
   participantRole   ParticipantRole? @relation(fields: [participantRoleId], references:[id], onDelete: Cascade, onUpdate: Cascade)
   participantRoleId String?
 
   volunteerRole     VolunteerRole? @relation(fields: [volunteerRoleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   volunteerRoleId   String?
+}
+
+enum EventAttendeeRole {
+  Volunteer
+  Participant
 }
 
 model ParticipantRole {

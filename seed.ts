@@ -1,7 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import type { EventAttendee, EventAttendeeRole } from '@prisma/client';
 
 export const prisma = new PrismaClient();
+
+/**------ Users --------
+ *
+ */
 
 const user1 = {
     firstName: 'Alfrida',
@@ -51,6 +56,8 @@ const user6 = {
     id: 'a990b081-76ec-4b7f-9e7f-09ef3947acc8'
 };
 
+/** ----------- Organizations --------------------- */
+
 const organization1 = {
     id: 'e98a5900-a675-4f6d-b992-b279a7dab938',
     name: 'Nairobi Chapel Ngong Road',
@@ -74,6 +81,8 @@ const organization3 = {
     town: 'Nairobi',
     industry: 'Gender Equality'
 };
+
+/**-------------- Events ------------------- */
 
 const event1 = {
     id: 'c17b9723-4acd-471d-a806-ab1830681cad',
@@ -225,6 +234,8 @@ const event15 = {
     endTime: new Date(2024, 6, 29)
 };
 
+/*----------- ParticipantRoles ------------------------------**/
+
 const participantRole1 = {
     title: 'Collector',
     eventId: 'bd18577c-158d-41f3-99de-34b76d8e108e',
@@ -243,6 +254,8 @@ const participantRole3 = {
     id: '1be76250-3bba-4332-9097-e694a61bf55c'
 };
 
+/**------------ VolunteerRoles ------------------------------ */
+
 const volunteerRole1 = {
     title: 'Facilitator',
     eventId: '5e14e5f8-8a3d-458b-aa29-deba8ce8cc0c', // Man Enough Camp
@@ -255,51 +268,73 @@ const volunteerRole2 = {
     id: '47f58e42-3fa7-4471-b8d0-ec5e20ccad9c'
 };
 
-const eventAttendee1 = {
+/**------------ EventAttendees ------------------------------ */
+
+type eventAttendee = {
+    id: string;
+    eventId: string;
+    userId: string;
+    participantRoleId: string | null;
+    volunteerRoleId: string | null;
+    role: EventAttendeeRole;
+};
+
+const eventAttendee1: eventAttendee = {
     id: '6ae9de01-8ce6-46b4-b95f-505d63ba2401',
     eventId: 'bd18577c-158d-41f3-99de-34b76d8e108e',
     userId: '3259287c-cafb-4efa-9acd-2b4005fc066b',
-    participantRoleId: '6059a8b6-cf63-482b-b68e-50586f8d361e'
+    participantRoleId: '6059a8b6-cf63-482b-b68e-50586f8d361e',
+    volunteerRoleId: null,
+    role: 'Participant'
 };
 
-const eventAttendee2 = {
+const eventAttendee2: eventAttendee = {
     id: '3aae08af-05f6-41b7-a3bc-0d46a454f99d',
     eventId: '5e14e5f8-8a3d-458b-aa29-deba8ce8cc0c',
     volunteerRoleId: '59c8e005-14dd-4d87-8b3d-91e2317413c4',
-    userId: '2bb929c2-6beb-4659-9977-14e706c41afb'
+    userId: '2bb929c2-6beb-4659-9977-14e706c41afb',
+    role: 'Volunteer',
+    participantRoleId: null
 };
 
-const eventAttendee3 = {
+const eventAttendee3: eventAttendee = {
     id: '1446be17-effb-4a86-b875-e556c7b8f21b',
     eventId: 'd078b8e2-3f97-4cd5-a722-43fc430b69e9',
     volunteerRoleId: '47f58e42-3fa7-4471-b8d0-ec5e20ccad9c',
-    userId: '3259287c-cafb-4efa-9acd-2b4005fc066b'
+    userId: '3259287c-cafb-4efa-9acd-2b4005fc066b',
+    role: 'Volunteer',
+    participantRoleId: null
 };
 
-const eventAttendee4 = {
+const eventAttendee4: eventAttendee = {
     id: 'a37e2586-dc7a-4d3b-9588-c204efc01718',
     eventId: 'd078b8e2-3f97-4cd5-a722-43fc430b69e9',
     volunteerRoleId: '47f58e42-3fa7-4471-b8d0-ec5e20ccad9c',
-    userId: '035571b2-1d1d-433f-9ee5-09977cd4111a'
+    userId: '035571b2-1d1d-433f-9ee5-09977cd4111a',
+    role: 'Volunteer',
+    participantRoleId: null
 };
 
-const eventAttendee5 = {
+const eventAttendee5: eventAttendee = {
     id: 'af2f1754-3bdb-47dd-8def-d7a2c7026b23',
     eventId: 'd078b8e2-3f97-4cd5-a722-43fc430b69e9',
     volunteerRoleId: '47f58e42-3fa7-4471-b8d0-ec5e20ccad9c',
-    userId: '4b679c56-207c-49fd-a246-617cf3c7740e'
+    userId: '4b679c56-207c-49fd-a246-617cf3c7740e',
+    role: 'Volunteer',
+    participantRoleId: null
 };
 
-const eventAttendee6 = {
+const eventAttendee6: eventAttendee = {
     id: '0910d6aa-19d7-4775-ad39-99dbe44666c4',
     eventId: 'd078b8e2-3f97-4cd5-a722-43fc430b69e9',
     volunteerRoleId: '47f58e42-3fa7-4471-b8d0-ec5e20ccad9c',
-    userId: 'a990b081-76ec-4b7f-9e7f-09ef3947acc8'
+    userId: 'a990b081-76ec-4b7f-9e7f-09ef3947acc8',
+    role: 'Volunteer',
+    participantRoleId: null
 };
 
 async function main() {
     await prisma.user.deleteMany();
-    await prisma.eventAttendee.deleteMany();
 
     await prisma.user.createMany({
         data: [user1, user2, user3, user4, user5, user6]
