@@ -2,7 +2,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import eventApis from './event_apis/event';
 import organizationApis from './organization_apis/organization';
-import participantRoleApis from './participant_role_apis/participant_roles';
+import sharedEventAttendeeRolesApis from './shared_event_roles_apis/shared_event_roles_routes';
 import userApis from './user_apis/user';
 
 const app = express();
@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(eventApis);
 app.use(organizationApis);
-app.use(participantRoleApis);
+app.use(sharedEventAttendeeRolesApis); // volunteerRoles and participantRoles
 app.use(userApis);
 
 app.listen(port, () => {
