@@ -107,4 +107,49 @@ router.put('/api/:roleType/:roleId', async (req, res, next) => {
     }
 });
 
+router.delete('/api/:roleType/:roleId', async (req, res, next) => {
+    // Deletes either a volunteer role or a participant role of given roleId
+
+    const allowedRoleTypesInReqPath = ['participant_roles', 'volunteer_roles'];
+
+    if (!allowedRoleTypesInReqPath.includes(req.params.roleType)) {
+        return res.status(404).json({ error: 'Not found' });
+    }
+
+    const roleType =
+        req.params.roleType === 'volunteer_roles'
+            ? 'volunteerRole'
+            : 'participantRole';
+
+    try {
+        if (roleType === 'volunteerRole') {
+            await prisma[roleType].delete({
+                where: {
+                    id: req.params.roleId
+                }
+            });
+
+            return res.json({});
+        } else {
+            await prisma[roleType].delete({
+                where: {
+                    id: req.params.roleId
+                }
+            });
+
+            return res.json({});
+        }
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res
+                    .status(404)
+                    .json({ error: 'Resource to delete not found' });
+            }
+        }
+
+        next(e);
+    }
+});
+
 export default router;
