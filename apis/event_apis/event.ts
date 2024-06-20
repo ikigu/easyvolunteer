@@ -140,12 +140,35 @@ router.put('/api/events/:eventId', async (req, res, next) => {
 
         return res.json(event);
     } catch (e) {
-        console.log(e);
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
                 return res
                     .status(404)
                     .json({ error: 'Event to update not found' });
+            }
+        }
+
+        next(e);
+    }
+});
+
+router.delete('/api/events/:eventId', async (req, res, next) => {
+    /**@todo: Require authorization */
+
+    try {
+        await prisma.event.delete({
+            where: {
+                id: req.params.eventId
+            }
+        });
+
+        return res.json({});
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res
+                    .status(404)
+                    .json({ error: 'Event to delete not found' });
             }
         }
 
