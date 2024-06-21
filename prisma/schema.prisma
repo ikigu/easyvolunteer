@@ -26,7 +26,7 @@ model User {
   houseName       String?
   houseNumber     String?
   town            String?
-  
+
   organizations   Organization[]
   eventsAttending EventAttendee[]
   eventsCreated   Event[]
@@ -39,14 +39,14 @@ model Organization {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @default(now())
   name            String
-  
+
   town            String?
   industry        String?
   description     String?
-  
+
   owner           User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId          String
-  
+
   events          Event[]
 
   @@map("organizations")
