@@ -177,8 +177,8 @@ router.delete('/api/events/:eventId', async (req, res, next) => {
 });
 
 router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
-    // Returns an array of volunteers or participants
-    // for event of eventId based on roleType
+    // Returns an array of volunteer or participant roles available
+    // for an event of eventId based on roleType passed as param in the req.path
 
     if (
         req.params.roleType !== 'volunteer_roles' &&
@@ -190,9 +190,7 @@ router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
     }
 
     const roleType =
-        req.params.roleType === 'volunteer_roles'
-            ? 'volunteerRoles'
-            : 'participantRoles';
+        req.params.roleType === 'volunteer_roles' ? 'Volunteer' : 'Participant';
 
     try {
         const event = await prisma.event.findUniqueOrThrow({
@@ -200,12 +198,15 @@ router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
                 id: req.params.eventId
             },
             include: {
-                participantRoles: true,
-                volunteerRoles: true
+                eventAttendeeRoles: {
+                    where: {
+                        type: roleType
+                    }
+                }
             }
         });
 
-        return res.json(event[roleType]);
+        return res.json(event.eventAttendeeRoles);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
