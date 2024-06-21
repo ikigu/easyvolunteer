@@ -88,4 +88,77 @@ router.delete('/api/event_attendee_roles/:roleId', async (req, res, next) => {
     }
 });
 
+router.get('/api/event_attendee_roles', async (req, res, next) => {
+    // Returns an array of volunteer or participant roles available
+    // for an event of eventId based on roleType passed as param in the req.path
+
+    const requiredFields = ['eventId', 'type'];
+
+    for (const field of requiredFields) {
+        if (!req.body[field]) {
+            return res.status(400).json({ error: `No ${field}` });
+        }
+    }
+
+    const allowedRoleTypes = ['Participant', 'Volunteer'];
+
+    if (!allowedRoleTypes.includes(req.body.type)) {
+        return res.status(400).json({ error: "Role doesn't exist" });
+    }
+
+    try {
+        const event = await prisma.event.findUniqueOrThrow({
+            where: {
+                id: req.body.eventId
+            },
+            include: {
+                eventAttendeeRoles: {
+                    where: {
+                        type: req.body.type
+                    }
+                }
+            }
+        });
+
+        return res.json(event.eventAttendeeRoles);
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if (e.code === 'P2025') {
+                return res.status(404).json({ error: 'Event does not exist' });
+            }
+        }
+
+        next(e);
+    }
+});
+
+router.post('/api/event_attendee_roles', async (req, res, next) => {
+    // Verify that the request body has all required fields
+
+    const requiredFields = ['title', 'eventId', 'type'];
+
+    for (const field of requiredFields) {
+        if (!req.body[field]) {
+            return res.status(400).json({ error: `No ${field}` });
+        }
+    }
+
+    // Verify that event of given id exists
+
+    try {
+        const role = await prisma.eventAttendeeRole.create({
+            data: req.body
+        });
+
+        return res.json(role);
+    } catch (e) {
+        if (e instanceof Prisma.PrismaClientKnownRequestError) {
+            if ((e.code = 'P2003')) {
+                return res.status(404).json({ error: "Event doesn't exist" });
+            }
+        }
+        next(e);
+    }
+});
+
 export default router;
