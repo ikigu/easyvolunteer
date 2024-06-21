@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, EventAttendeeRoleType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -42,23 +42,50 @@ async function createEventAttendee(role: 'participant' | 'volunteer') {
             creatorId: user.id,
             description:
                 'On the 3rd of August, 2024 we march to create awareness on Health4All!',
-            volunteerRoles: {
-                create: {
-                    title: 'Route Marshall'
-                }
-            },
-            participantRoles: {
-                create: {
-                    title: '10k race'
+            eventAttendeeRoles: {
+                createMany: {
+                    data: [
+                        {
+                            title: 'Route Marshall',
+                            type: 'Volunteer'
+                        },
+                        {
+                            title: '10k race',
+                            type: 'Participant'
+                        }
+                    ]
                 }
             }
         }
     });
 
-    const eventWithVolunteerDetails = await prisma.event.findFirst({
+    let roleType: EventAttendeeRoleType = 'Volunteer';
+
+    const eventWithVolunteerDetails = await prisma.event.findUniqueOrThrow({
+        where: {
+            id: event.id
+        },
         include: {
-            volunteerRoles: true,
-            participantRoles: true
+            eventAttendeeRoles: {
+                where: {
+                    type: roleType
+                }
+            }
+        }
+    });
+
+    roleType = 'Participant';
+
+    const eventWithParticipantDetails = await prisma.event.findUniqueOrThrow({
+        where: {
+            id: event.id
+        },
+        include: {
+            eventAttendeeRoles: {
+                where: {
+                    type: roleType
+                }
+            }
         }
     });
 
@@ -79,7 +106,8 @@ async function createEventAttendee(role: 'participant' | 'volunteer') {
             data: {
                 userId: volunteer.id,
                 eventId: event.id,
-                volunteerRoleId: eventWithVolunteerDetails?.volunteerRoles[0].id
+                roleId: eventWithVolunteerDetails.eventAttendeeRoles[0].id,
+                roleType: 'Volunteer'
             }
         });
     }
@@ -98,8 +126,8 @@ async function createEventAttendee(role: 'participant' | 'volunteer') {
             data: {
                 userId: participant.id,
                 eventId: event.id,
-                participantRoleId:
-                    eventWithVolunteerDetails?.participantRoles[0].id
+                roleId: eventWithParticipantDetails?.eventAttendeeRoles[0].id,
+                roleType: 'Participant'
             }
         });
     }
@@ -130,10 +158,10 @@ test('Participant EventAttendee is created, given all required details', async (
     const volunteerAttendee = await prisma.eventAttendee.findFirst({
         include: {
             user: true,
-            participantRole: true
+            role: true
         },
         where: {
-            participantRole: {
+            role: {
                 title: '10k race'
             }
         }
