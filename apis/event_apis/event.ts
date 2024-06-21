@@ -217,4 +217,71 @@ router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
     }
 });
 
+router.post(
+    '/api/events/:eventId/:eventAttendeeRoleType',
+    async (req, res, next) => {
+        // Verify that eventAttendeeRoleType is of the correct type (participant_roles | volunteer_roles)
+
+        if (
+            req.params.eventAttendeeRoleType !== 'volunteer_roles' &&
+            req.params.eventAttendeeRoleType !== 'participant_roles'
+        ) {
+            return res.status(404).json({
+                error: `Resource type '${req.params.eventAttendeeRoleType}' doesn't exist on events`
+            });
+        }
+
+        const roleType =
+            req.params.eventAttendeeRoleType === 'volunteer_roles'
+                ? 'volunteerRole'
+                : 'participantRole';
+
+        // Verify that event of given id exists
+
+        try {
+            await prisma.event.findUniqueOrThrow({
+                where: {
+                    id: req.params.eventId
+                }
+            });
+        } catch (e) {
+            if (e instanceof Prisma.PrismaClientKnownRequestError) {
+                if (e.code === 'P2025') {
+                    return res
+                        .status(404)
+                        .json({ error: 'Event does not exist' });
+                }
+            }
+
+            next(e);
+        }
+
+        // Verify that the request body has all required fields
+
+        if (!req.body.title) return res.status(400).json({ error: 'No title' });
+
+        // Create the correct type of role depending on the value of eventAttendeeRoleType
+
+        req.body.eventId = req.params.eventId;
+
+        try {
+            if (roleType === 'volunteerRole') {
+                const volunteerRole = await prisma.volunteerRole.create({
+                    data: req.body
+                });
+
+                return res.json(volunteerRole);
+            } else {
+                const participantRole = await prisma.participantRole.create({
+                    data: req.body
+                });
+
+                return res.json(participantRole);
+            }
+        } catch (e) {
+            next(e);
+        }
+    }
+);
+
 export default router;
