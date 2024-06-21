@@ -7,38 +7,17 @@ const router = express.Router();
 // Contains get, put and delete apis for volunteerRoles and participantRoles
 // Each route takes the role type (volunteer or participant) and id
 
-router.get('/api/:roleType/:roleId', async (req, res, next) => {
+router.get('/api/event_attendee_roles/:roleId', async (req, res, next) => {
     // Returns either a volunteer role or a participant role
 
-    const allowedRoleTypesInReqPath = ['participant_roles', 'volunteer_roles'];
-
-    if (!allowedRoleTypesInReqPath.includes(req.params.roleType)) {
-        return res.status(404).json({ error: 'Not found' });
-    }
-
-    const roleType =
-        req.params.roleType === 'volunteer_roles'
-            ? 'volunteerRole'
-            : 'participantRole';
-
     try {
-        if (roleType === 'volunteerRole') {
-            const volunteerRole = await prisma[roleType].findUniqueOrThrow({
-                where: {
-                    id: req.params.roleId
-                }
-            });
+        const role = await prisma.eventAttendeeRole.findUniqueOrThrow({
+            where: {
+                id: req.params.roleId
+            }
+        });
 
-            return res.json(volunteerRole);
-        } else {
-            const participantRole = await prisma[roleType].findUniqueOrThrow({
-                where: {
-                    id: req.params.roleId
-                }
-            });
-
-            return res.json(participantRole);
-        }
+        return res.json(role);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
@@ -50,19 +29,8 @@ router.get('/api/:roleType/:roleId', async (req, res, next) => {
     }
 });
 
-router.put('/api/:roleType/:roleId', async (req, res, next) => {
+router.put('/api/event_attendee_roles/:roleId', async (req, res, next) => {
     // Updates either a volunteer role or a participant role of given roleId
-
-    const allowedRoleTypesInReqPath = ['participant_roles', 'volunteer_roles'];
-
-    if (!allowedRoleTypesInReqPath.includes(req.params.roleType)) {
-        return res.status(404).json({ error: 'Not found' });
-    }
-
-    const roleType =
-        req.params.roleType === 'volunteer_roles'
-            ? 'volunteerRole'
-            : 'participantRole';
 
     const allowedFields = ['title', 'description'];
 
@@ -75,25 +43,14 @@ router.put('/api/:roleType/:roleId', async (req, res, next) => {
     req.body.updatedAt = new Date();
 
     try {
-        if (roleType === 'volunteerRole') {
-            const volunteerRole = await prisma[roleType].update({
-                where: {
-                    id: req.params.roleId
-                },
-                data: req.body
-            });
+        const role = await prisma.eventAttendeeRole.update({
+            where: {
+                id: req.params.roleId
+            },
+            data: req.body
+        });
 
-            return res.json(volunteerRole);
-        } else {
-            const participantRole = await prisma[roleType].update({
-                where: {
-                    id: req.params.roleId
-                },
-                data: req.body
-            });
-
-            return res.json(participantRole);
-        }
+        return res.json(role);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
@@ -107,38 +64,17 @@ router.put('/api/:roleType/:roleId', async (req, res, next) => {
     }
 });
 
-router.delete('/api/:roleType/:roleId', async (req, res, next) => {
+router.delete('/api/event_attendee_roles/:roleId', async (req, res, next) => {
     // Deletes either a volunteer role or a participant role of given roleId
 
-    const allowedRoleTypesInReqPath = ['participant_roles', 'volunteer_roles'];
-
-    if (!allowedRoleTypesInReqPath.includes(req.params.roleType)) {
-        return res.status(404).json({ error: 'Not found' });
-    }
-
-    const roleType =
-        req.params.roleType === 'volunteer_roles'
-            ? 'volunteerRole'
-            : 'participantRole';
-
     try {
-        if (roleType === 'volunteerRole') {
-            await prisma[roleType].delete({
-                where: {
-                    id: req.params.roleId
-                }
-            });
+        await prisma.eventAttendeeRole.delete({
+            where: {
+                id: req.params.roleId
+            }
+        });
 
-            return res.json({});
-        } else {
-            await prisma[roleType].delete({
-                where: {
-                    id: req.params.roleId
-                }
-            });
-
-            return res.json({});
-        }
+        return res.json({});
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
