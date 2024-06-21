@@ -9,6 +9,7 @@ const app = express();
 
 const port = process.env.API_PORT || 5001;
 
+app.set('json spaces', 2);
 app.use((req, res, next) => {
     console.log(`HTTP ${req.httpVersion} ${req.method} ${req.path}`);
     next();
