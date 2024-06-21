@@ -30,6 +30,8 @@ model User {
   organizations   Organization[]
   eventsAttending EventAttendee[]
   eventsCreated   Event[]
+
+  @@map("users")
 }
 
 model Organization {
@@ -46,6 +48,8 @@ model Organization {
   userId          String
   
   events          Event[]
+
+  @@map("organizations")
 }
 
 model Event {
@@ -69,6 +73,8 @@ model Event {
 
   eventAttendeeRoles  EventAttendeeRole[]
   attendees           EventAttendee[]
+
+  @@map("events")
 }
 
 model EventAttendee {
@@ -86,6 +92,8 @@ model EventAttendee {
 
   role              EventAttendeeRole? @relation(fields: [roleId], references:[id], onDelete: Cascade, onUpdate: Cascade)
   roleId String?
+
+  @@map("event_attendees")
 }
 
 enum EventAttendeeRoleType {
@@ -107,5 +115,7 @@ model EventAttendeeRole {
   description     String?
 
   participants    EventAttendee[]
+
+  @@map("event_attendee_roles")
 }
 
