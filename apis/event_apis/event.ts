@@ -219,23 +219,23 @@ router.get('/api/events/:eventId/:roleType', async (req, res, next) => {
 });
 
 router.post(
-    '/api/events/:eventId/:eventAttendeeRoleType',
+    '/api/events/:eventId/:eventAttendeeRole',
     async (req, res, next) => {
         // Verify that eventAttendeeRoleType is of the correct type (participant_roles | volunteer_roles)
 
         if (
-            req.params.eventAttendeeRoleType !== 'volunteer_roles' &&
-            req.params.eventAttendeeRoleType !== 'participant_roles'
+            req.params.eventAttendeeRole !== 'volunteer_roles' &&
+            req.params.eventAttendeeRole !== 'participant_roles'
         ) {
             return res.status(404).json({
-                error: `Resource type '${req.params.eventAttendeeRoleType}' doesn't exist on events`
+                error: `Resource type '${req.params.eventAttendeeRole}' doesn't exist on events`
             });
         }
 
         const roleType =
-            req.params.eventAttendeeRoleType === 'volunteer_roles'
-                ? 'volunteerRole'
-                : 'participantRole';
+            req.params.eventAttendeeRole === 'volunteer_roles'
+                ? 'Volunteer'
+                : 'Participant';
 
         // Verify that event of given id exists
 
@@ -264,21 +264,14 @@ router.post(
         // Create the correct type of role depending on the value of eventAttendeeRoleType
 
         req.body.eventId = req.params.eventId;
+        req.body.type = roleType;
 
         try {
-            if (roleType === 'volunteerRole') {
-                const volunteerRole = await prisma.volunteerRole.create({
-                    data: req.body
-                });
+            const role = await prisma.eventAttendeeRole.create({
+                data: req.body
+            });
 
-                return res.json(volunteerRole);
-            } else {
-                const participantRole = await prisma.participantRole.create({
-                    data: req.body
-                });
-
-                return res.json(participantRole);
-            }
+            return res.json(role);
         } catch (e) {
             next(e);
         }
