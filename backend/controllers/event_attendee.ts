@@ -1,11 +1,8 @@
-import express from 'express';
-import prisma from '../client';
+import prisma from './client';
 import { Prisma } from '@prisma/client';
 
-const router = express.Router();
-
 // Create an event attendee
-router.post('/api/event_attendees/', async (req, res, next) => {
+export const createEventAttendee = async (req: any, res: any, next: any) => {
     const requiredFields = ['userId', 'roleId', 'eventId', 'roleType'];
 
     for (const field of requiredFields) {
@@ -42,10 +39,15 @@ router.post('/api/event_attendees/', async (req, res, next) => {
         }
         next(e);
     }
-});
+};
 
 // Get all people attending an event as volunteers, participants
-router.get('/api/event_attendees', async (req, res, next) => {
+
+export const getEventAttendeesByEventIdandRoleType = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     const requiredFields = ['roleType', 'eventId'];
 
     for (const field of requiredFields) {
@@ -74,10 +76,11 @@ router.get('/api/event_attendees', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
 // Get an event attendee
-router.get('/api/event_attendees/:id', async (req, res, next) => {
+
+export const getEventAttendeeById = async (req: any, res: any, next: any) => {
     try {
         const eventAttendee = await prisma.eventAttendee.findUniqueOrThrow({
             where: {
@@ -94,10 +97,15 @@ router.get('/api/event_attendees/:id', async (req, res, next) => {
         }
         next(e);
     }
-});
+};
 
 // Delete an event attendee record
-router.delete('/api/event_attendees/:id', async (req, res, next) => {
+
+export const deleteEventAttendeeById = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     try {
         await prisma.eventAttendee.delete({
             where: {
@@ -115,4 +123,4 @@ router.delete('/api/event_attendees/:id', async (req, res, next) => {
 
         next(e);
     }
-});
+};

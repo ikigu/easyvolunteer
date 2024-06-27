@@ -1,13 +1,14 @@
-import express from 'express';
-import prisma from '../client';
+import prisma from './client';
 import { Prisma } from '@prisma/client';
-
-const router = express.Router();
 
 // Contains get, put and delete apis for volunteerRoles and participantRoles
 // Each route takes the role type (volunteer or participant) and id
 
-router.get('/api/event_attendee_roles/:roleId', async (req, res, next) => {
+export const getEventAttendeeRoleById = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     // Returns either a volunteer role or a participant role
 
     try {
@@ -27,9 +28,13 @@ router.get('/api/event_attendee_roles/:roleId', async (req, res, next) => {
 
         next(e);
     }
-});
+};
 
-router.put('/api/event_attendee_roles/:roleId', async (req, res, next) => {
+export const updateEventAttendeeRoleById = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     // Updates either a volunteer role or a participant role of given roleId
 
     const allowedFields = ['title', 'description'];
@@ -62,9 +67,13 @@ router.put('/api/event_attendee_roles/:roleId', async (req, res, next) => {
 
         next(e);
     }
-});
+};
 
-router.delete('/api/event_attendee_roles/:roleId', async (req, res, next) => {
+export const deleteEventAttendeeRoleById = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     // Deletes either a volunteer role or a participant role of given roleId
 
     try {
@@ -86,9 +95,13 @@ router.delete('/api/event_attendee_roles/:roleId', async (req, res, next) => {
 
         next(e);
     }
-});
+};
 
-router.get('/api/event_attendee_roles', async (req, res, next) => {
+export const getAllEventAttendeeRolesForEventByType = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     // Returns an array of volunteer or participant roles available
     // for an event of eventId based on roleType passed as param in the req.path
 
@@ -130,9 +143,13 @@ router.get('/api/event_attendee_roles', async (req, res, next) => {
 
         next(e);
     }
-});
+};
 
-router.post('/api/event_attendee_roles', async (req, res, next) => {
+export const createEventAttendeeRole = async (
+    req: any,
+    res: any,
+    next: any
+) => {
     // Verify that the request body has all required fields
 
     const requiredFields = ['title', 'eventId', 'type'];
@@ -159,6 +176,4 @@ router.post('/api/event_attendee_roles', async (req, res, next) => {
         }
         next(e);
     }
-});
-
-export default router;
+};

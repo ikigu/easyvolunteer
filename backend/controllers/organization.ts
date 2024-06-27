@@ -1,10 +1,7 @@
-import express from 'express';
-import prisma from '../client';
+import prisma from './client';
 import { Prisma } from '@prisma/client';
 
-const router = express.Router();
-
-router.get('/api/organizations', async (req, res, next) => {
+export const getAllOrganizations = async (req: any, res: any, next: any) => {
     // TODO: Create error handling middleware for this
     try {
         const allOrganizations = await prisma.organization.findMany();
@@ -12,9 +9,9 @@ router.get('/api/organizations', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.get('/api/organizations/:organizationId', async (req, res, next) => {
+export const getOrganizationById = async (req: any, res: any, next: any) => {
     try {
         const organization = await prisma.organization.findUnique({
             where: {
@@ -30,9 +27,9 @@ router.get('/api/organizations/:organizationId', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.post('/api/organizations', async (req, res, next) => {
+export const createNewOrganization = async (req: any, res: any, next: any) => {
     const requiredFields = ['name', 'userId'];
 
     for (const field of requiredFields) {
@@ -71,9 +68,9 @@ router.post('/api/organizations', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.put('/api/organizations/:organizationId', async (req, res, next) => {
+export const updateOrganizationById = async (req: any, res: any, next: any) => {
     try {
         const organization = await prisma.organization.findUnique({
             where: {
@@ -116,9 +113,9 @@ router.put('/api/organizations/:organizationId', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.delete('/api/organizations/:organizationId', async (req, res, next) => {
+export const deleteOrganizationById = async (req: any, res: any, next: any) => {
     // TODO: This method should require authorization
 
     try {
@@ -140,6 +137,4 @@ router.delete('/api/organizations/:organizationId', async (req, res, next) => {
 
         next(e);
     }
-});
-
-export default router;
+};

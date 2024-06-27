@@ -1,15 +1,12 @@
 import bcrypt from 'bcrypt';
-import express from 'express';
-import prisma from '../client';
 import { Prisma } from '@prisma/client';
-
-const router = express.Router();
+import prisma from './client';
 
 /**
  * Returns all users
  */
 
-router.get('/api/users', async (req, res) => {
+export const getAllUsers = async (req: any, res: any, next: any) => {
     // TODO: add try/catch block for error handling
     const allUsers: any = await prisma.user.findMany();
 
@@ -18,9 +15,9 @@ router.get('/api/users', async (req, res) => {
     }
 
     res.json(allUsers);
-});
+};
 
-router.get('/api/users/:userid', async (req, res) => {
+export const getUserById = async (req: any, res: any, next: any) => {
     //TODO: add try/catch block for error handling
     const user: any = await prisma.user.findUnique({
         where: {
@@ -35,9 +32,9 @@ router.get('/api/users/:userid', async (req, res) => {
     delete user.password;
 
     return res.json(user);
-});
+};
 
-router.post('/api/users', async (req, res) => {
+export const createUser = async (req: any, res: any, next: any) => {
     // TODO: Ensure email is correct format
     // TODO: Enforce some rules for password?
 
@@ -76,9 +73,9 @@ router.post('/api/users', async (req, res) => {
     delete userWithoutPassword.password;
 
     return res.json(userWithoutPassword);
-});
+};
 
-router.delete('/api/users/:userId', async (req, res) => {
+export const deleteUser = async (req: any, res: any, next: any) => {
     //TODO: This method might require an auth token
     //TODO: Correctly handle user not found case, nothing happens now weirdly
 
@@ -99,9 +96,9 @@ router.delete('/api/users/:userId', async (req, res) => {
             return res.status(500).json({ error: 'Something went wrong' });
         }
     }
-});
+};
 
-router.put('/api/users/:userId', async (req, res) => {
+export const updateUser = async (req: any, res: any, next: any) => {
     // TODO: profilePhotoUrl will require additional logic
     // TODO: birthday might require a typecheck?
 
@@ -156,6 +153,4 @@ router.put('/api/users/:userId', async (req, res) => {
             res.status(500).json({ error: 'Something went wrong' });
         }
     }
-});
-
-export default router;
+};

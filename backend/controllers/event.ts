@@ -1,10 +1,7 @@
-import express from 'express';
-import prisma from '../client';
+import prisma from './client';
 import { Prisma } from '@prisma/client';
 
-const router = express.Router();
-
-router.get('/api/events', async (req, res, next) => {
+export const getAllEvents = async (req: any, res: any, next: any) => {
     // Return all events
 
     try {
@@ -14,9 +11,9 @@ router.get('/api/events', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.get('/api/events/:eventId', async (req, res, next) => {
+export const getEventById = async (req: any, res: any, next: any) => {
     // Return event of eventId if it exists
 
     try {
@@ -32,9 +29,9 @@ router.get('/api/events/:eventId', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
-router.post('/api/events', async (req, res, next) => {
+export const createNewEvent = async (req: any, res: any, next: any) => {
     // Check if all required fields are in the request body
     const requiredFields = [
         'creatorId',
@@ -103,13 +100,13 @@ router.post('/api/events', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
-});
+};
 
 /**
  * @todo: This method should check for some authorization
  */
 
-router.put('/api/events/:eventId', async (req, res, next) => {
+export const updateEventById = async (req: any, res: any, next: any) => {
     // Delete any request body fields not in db schema
 
     const allowedFields = [
@@ -150,9 +147,9 @@ router.put('/api/events/:eventId', async (req, res, next) => {
 
         next(e);
     }
-});
+};
 
-router.delete('/api/events/:eventId', async (req, res, next) => {
+export const deleteEventById = async (req: any, res: any, next: any) => {
     /**@todo: Require authorization */
 
     try {
@@ -174,6 +171,4 @@ router.delete('/api/events/:eventId', async (req, res, next) => {
 
         next(e);
     }
-});
-
-export default router;
+};
