@@ -116,7 +116,11 @@ export const getAllEventAttendeeRolesForEventByType = async (
     const allowedRoleTypes = ['Participant', 'Volunteer'];
 
     if (!allowedRoleTypes.includes(req.body.type)) {
-        return res.status(400).json({ error: "Role doesn't exist" });
+        return res
+            .status(400)
+            .json({
+                error: "Given 'type' doesn't exist. Allowed types are: 'Participant' and 'Volunteer'"
+            });
     }
 
     try {
