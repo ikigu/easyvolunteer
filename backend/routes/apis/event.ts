@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/api/events');
+router.get('/api/events', getAllEvents);
 
 router.get('/api/events/:eventId', getEventById);
 
