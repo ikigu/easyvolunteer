@@ -204,15 +204,6 @@ const events = [
         endTime: new Date()
     },
     {
-        id: '',
-        creatorId: '4b679c56-207c-49fd-a246-617cf3c7740e',
-        organizationId: '8b1eb7b3-0bb8-40d6-9f03-58dde5b7eb84',
-        title: 'Tree Planting',
-        cost: 8493,
-        startTime: new Date(),
-        endTime: new Date()
-    },
-    {
         id: '669fe24d-dd21-4b58-bd4e-02e92d972fe7',
         creatorId: '4b679c56-207c-49fd-a246-617cf3c7740e',
         organizationId: '8b1eb7b3-0bb8-40d6-9f03-58dde5b7eb84',
