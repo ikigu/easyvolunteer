@@ -8,7 +8,7 @@
         "prettier-format": "prettier --config .prettierrc './**/*.ts' --write",
         "migrate": "npx prisma migrate dev --name init",
         "api-server": "nodemon backend/routes/apis/app.ts",
-        "seed": "npx ts-node seed.ts"
+        "seed": "npx ts-node backend/data/seed.ts"
     },
     "repository": {
         "type": "git",
