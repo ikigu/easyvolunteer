@@ -48,7 +48,7 @@ export const getEventAttendeesByEventIdandRoleType = async (
     res: any,
     next: any
 ) => {
-    const requiredFields = ['roleType', 'eventId'];
+    const requiredFields = ['eventId', 'roleType'];
 
     for (const field of requiredFields) {
         if (!req.body[field]) {
@@ -59,9 +59,9 @@ export const getEventAttendeesByEventIdandRoleType = async (
     const allowedRoleTypes = ['Participant', 'Volunteer'];
 
     if (!allowedRoleTypes.includes(req.body.roleType)) {
-        return res
-            .status(400)
-            .json({ error: `${req.body.roleType} role doesn't exist` });
+        return res.status(400).json({
+            error: `'${req.body.roleType}' roleType doesn't exist. Available roleTypes are 'Participant' and 'Volunteer'`
+        });
     }
 
     try {
@@ -91,7 +91,7 @@ export const getEventAttendeeById = async (req: any, res: any, next: any) => {
         return res.json(eventAttendee);
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
-            if (e.code === 'P2001') {
+            if (e.code === 'P2025') {
                 return res.status(404).json({ error: 'Not found' });
             }
         }
@@ -112,6 +112,8 @@ export const deleteEventAttendeeById = async (
                 id: req.params.id
             }
         });
+
+        return res.json({});
     } catch (e) {
         if (e instanceof Prisma.PrismaClientKnownRequestError) {
             if (e.code === 'P2025') {
