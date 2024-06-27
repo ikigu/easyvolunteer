@@ -43,7 +43,7 @@ export const createNewEvent = async (req: any, res: any, next: any) => {
     ];
 
     for (const field of requiredFields) {
-        if (!req.body[field]) {
+        if (!(field in req.body)) {
             return res
                 .status(400)
                 .json({ error: `Required field not provided: ${field}` });
