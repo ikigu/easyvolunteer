@@ -1,0 +1,7 @@
+.navigation {
+    min-width: 256px;
+    position: fixed;
+    top: 62.5px;
+    left: 0px;
+    padding-top: 24px;
+}

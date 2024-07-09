@@ -1,0 +1,16 @@
+h5.button {
+	padding: 12px 24px; 
+	margin: 0 8px;
+	box-sizing: border-box;
+	transition: background-color 0.1s ease;
+}
+
+h5.button:hover {
+	background-color: rgb(223, 223, 255);
+	border-radius: 8px;
+}
+
+h5.button.active {
+	background-color: rgb(206, 206, 255);
+	border-radius: 8px;
+}

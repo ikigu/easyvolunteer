@@ -1,0 +1,24 @@
+.avatar {
+    background-color: rgb(112, 116, 192);
+    display: inline-block;
+    padding: 12px 13px;
+    border-radius: 50%;
+    color: white;
+    text-align: center;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 32px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: transparent;
+}
+
+body {
+    margin: 0;
+}
