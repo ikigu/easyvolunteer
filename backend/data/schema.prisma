@@ -64,7 +64,9 @@ model Event {
   organizationId      String
 
   title               String
-  description         String?
+  description         String? @db.VarChar(4096)
+
+  poster              String? @db.VarChar(2096)
 
   startTime           DateTime
   endTime             DateTime
