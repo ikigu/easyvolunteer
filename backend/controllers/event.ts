@@ -5,7 +5,12 @@ export const getAllEvents = async (req: any, res: any, next: any) => {
     // Return all events
 
     try {
-        const allEvents = await prisma.event.findMany();
+        const allEvents = await prisma.event.findMany({
+            include: {
+                organization: true,
+                eventAttendeeRoles: true
+            }
+        });
 
         return res.json(allEvents);
     } catch (e) {
