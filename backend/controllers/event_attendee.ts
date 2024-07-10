@@ -1,7 +1,14 @@
 import prisma from './client';
 import { Prisma } from '@prisma/client';
 
-// Create an event attendee
+/**
+ * Creates a new event attendee for an event
+ * @param req Request object
+ * @param res Response object
+ * @param next Function to call next middleware
+ * @returns the newly-created eventAttendee object
+ */
+
 export const createEventAttendee = async (req: any, res: any, next: any) => {
     const requiredFields = ['userId', 'roleId', 'eventId', 'roleType'];
 
@@ -41,7 +48,14 @@ export const createEventAttendee = async (req: any, res: any, next: any) => {
     }
 };
 
-// Get all people attending an event as volunteers, participants
+/**
+ *
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an array of eventAttendee objects for an event depending
+ *  on the roleType and eventId passed as request parameters
+ */
 
 export const getEventAttendeesByEventIdandRoleType = async (
     req: any,
@@ -78,8 +92,13 @@ export const getEventAttendeesByEventIdandRoleType = async (
     }
 };
 
-// Get an event attendee
-
+/**
+ *
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an eventAttendee object of the id passed as a request parameter
+ */
 export const getEventAttendeeById = async (req: any, res: any, next: any) => {
     try {
         const eventAttendee = await prisma.eventAttendee.findUniqueOrThrow({
@@ -99,7 +118,13 @@ export const getEventAttendeeById = async (req: any, res: any, next: any) => {
     }
 };
 
-// Delete an event attendee record
+/**
+ * Deletes an eventAttendee record from the database
+ * @param req reuest object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an empty object on success, 404 on error
+ */
 
 export const deleteEventAttendeeById = async (
     req: any,
