@@ -4,6 +4,14 @@ import { Prisma } from '@prisma/client';
 // Contains get, put and delete apis for volunteerRoles and participantRoles
 // Each route takes the role type (volunteer or participant) and id
 
+/**
+ * Returns event attendee role by id
+ * @param req Request object
+ * @param res Response object
+ * @param next Function to call the next middleware
+ * @returns A single event attendee role by id
+ */
+
 export const getEventAttendeeRoleById = async (
     req: any,
     res: any,
@@ -29,6 +37,14 @@ export const getEventAttendeeRoleById = async (
         next(e);
     }
 };
+
+/**
+ * Updates an eventAttendeeRole object in the database
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns the updated eventAttendeeRole object
+ */
 
 export const updateEventAttendeeRoleById = async (
     req: any,
@@ -69,6 +85,14 @@ export const updateEventAttendeeRoleById = async (
     }
 };
 
+/**
+ * deletes an eventAttendee role if it exists in the database
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an empty object on success, error if object didn't exist
+ */
+
 export const deleteEventAttendeeRoleById = async (
     req: any,
     res: any,
@@ -97,6 +121,14 @@ export const deleteEventAttendeeRoleById = async (
     }
 };
 
+/**
+ * returns all eventAttendeeRoles for a given event by type (Volunteer | Participant)
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns returns all eventAttendeeRoles for a given event by type (Volunteer | Participant)
+ */
+
 export const getAllEventAttendeeRolesForEventByType = async (
     req: any,
     res: any,
@@ -116,11 +148,9 @@ export const getAllEventAttendeeRolesForEventByType = async (
     const allowedRoleTypes = ['Participant', 'Volunteer'];
 
     if (!allowedRoleTypes.includes(req.body.type)) {
-        return res
-            .status(400)
-            .json({
-                error: "Given 'type' doesn't exist. Allowed types are: 'Participant' and 'Volunteer'"
-            });
+        return res.status(400).json({
+            error: "Given 'type' doesn't exist. Allowed types are: 'Participant' and 'Volunteer'"
+        });
     }
 
     try {
@@ -148,6 +178,14 @@ export const getAllEventAttendeeRolesForEventByType = async (
         next(e);
     }
 };
+
+/**
+ * Creates an event attendee role
+ * @param req request object
+ * @param res response object
+ * @param next function to call the next middleware
+ * @returns The new eventAttendeeRole
+ */
 
 export const createEventAttendeeRole = async (
     req: any,
