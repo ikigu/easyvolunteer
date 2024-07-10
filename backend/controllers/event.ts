@@ -1,6 +1,14 @@
 import prisma from './client';
 import { Prisma } from '@prisma/client';
 
+/**
+ * Gets all events in the database
+ * @param req request object
+ * @param res response object
+ * @param next function to call the next middleware
+ * @returns An array of events in the database
+ */
+
 export const getAllEvents = async (req: any, res: any, next: any) => {
     // Return all events
 
@@ -17,6 +25,15 @@ export const getAllEvents = async (req: any, res: any, next: any) => {
         next(e);
     }
 };
+
+/**
+ * Gets the event of the event id passed as a query parameter
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an event of the event id passed as a request param if found,
+ * 404 if the event doesn't exist
+ */
 
 export const getEventById = async (req: any, res: any, next: any) => {
     // Return event of eventId if it exists
@@ -35,6 +52,14 @@ export const getEventById = async (req: any, res: any, next: any) => {
         next(e);
     }
 };
+
+/**
+ * Creates a new event in the database
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns 400 if req body not correct, 404 if user Id passed in body does not exist in db, an event object if the creation was a success
+ */
 
 export const createNewEvent = async (req: any, res: any, next: any) => {
     // Check if all required fields are in the request body
@@ -108,6 +133,11 @@ export const createNewEvent = async (req: any, res: any, next: any) => {
 };
 
 /**
+ * Updates event with the event id passed as a query param in the database
+ * @param req request body
+ * @param res response body
+ * @param next function to call the next middleware
+ * @return 404 if the event couldn't be found, 400 for a bad request body, 403 if not authorized, updated event object if it's found in the database
  * @todo: This method should check for some authorization
  */
 
@@ -153,6 +183,14 @@ export const updateEventById = async (req: any, res: any, next: any) => {
         next(e);
     }
 };
+
+/**
+ * Deletes the event of event id passed as a query param in the database
+ * @param req request object
+ * @param res response object
+ * @param next function to call next middleware
+ * @returns an empty object on sucessful deletion, 404 error if the event doesn't exist
+ */
 
 export const deleteEventById = async (req: any, res: any, next: any) => {
     /**@todo: Require authorization */
